@@ -3,11 +3,22 @@ package com.ibu.edu.ba.gameworld;
 /**
  * Created by Omer on 6.5.2015.
  */
-import com.badlogic.gdx.Gdx;
+
+import com.ibu.edu.ba.gameobjects.Goku;
 
 public class GameWorld {
+    private Goku goku;
+
+    public GameWorld(int midPointY) {
+        goku = new Goku(33, midPointY - 5, 17, 12);
+    }
 
     public void update(float delta) {
-        Gdx.app.log("GameWorld", "update");
+        goku.update(delta);
+    }
+
+    public Goku getGoku() {
+        return goku;
+
     }
 }

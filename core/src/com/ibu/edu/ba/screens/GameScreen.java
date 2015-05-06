@@ -8,27 +8,41 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.ibu.edu.ba.gameworld.GameRenderer;
 import com.ibu.edu.ba.gameworld.GameWorld;
+import com.ibu.edu.ba.gfhelpers.InputHandler;
 
 public class GameScreen implements Screen {
 
     private GameWorld world;
     private GameRenderer renderer;
+    private float runTime;
 
+    // This is the constructor, not the class declaration
     public GameScreen() {
-        Gdx.app.log("GameScreen", "Attached");
-        world = new GameWorld();
-        renderer = new GameRenderer(world);
+
+        float screenWidth = Gdx.graphics.getWidth();
+        float screenHeight = Gdx.graphics.getHeight();
+        float gameWidth = 136;
+        float gameHeight = screenHeight / (screenWidth / gameWidth);
+
+        int midPointY = (int) (gameHeight / 2);
+
+        world = new GameWorld(midPointY);
+        renderer = new GameRenderer(world, (int) gameHeight, midPointY);
+
+        Gdx.input.setInputProcessor(new InputHandler(world.getGoku()));
+
     }
 
     @Override
     public void render(float delta) {
+        runTime += delta;
         world.update(delta);
-        renderer.render();
+        renderer.render(runTime);
     }
 
     @Override
     public void resize(int width, int height) {
-        Gdx.app.log("GameScreen", "resizing");
+
     }
 
     @Override
