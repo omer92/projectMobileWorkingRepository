@@ -1,8 +1,5 @@
 package com.ibu.edu.ba.gfhelpers;
 
-/**
- * Created by Omer on 6.5.2015.
- */
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -11,51 +8,86 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AssetLoader {
 
-    public static Texture texture;
-    public static TextureRegion bg, grass;
+    public static Texture background;
+
+    // Goku flying state still pictures
+
+    public static Texture gokuFlying1;
+    public static Texture gokuFlying2;
+    public static Texture gokuFlying3;
+    public static Texture gokuFlying4;
+
+
+    public static TextureRegion myBg;
 
     public static Animation gokuAnimation;
-    public static TextureRegion goku, gokuDown, gokuUp;
+    public static TextureRegion gF1, gF2, gF3, gF4;
 
-    public static TextureRegion skullUp, skullDown, bar;
+    //public static TextureRegion skullUp, skullDown, bar;
 
     public static void load() {
 
-        texture = new Texture(Gdx.files.internal("data/texture.png"));
-        texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+        background = new Texture(Gdx.files.internal("data/background.jpg"));
+        background.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
-        bg = new TextureRegion(texture, 0, 0, 136, 43);
-        bg.flip(false, true);
 
-        grass = new TextureRegion(texture, 0, 43, 143, 11);
-        grass.flip(false, true);
+        myBg = new TextureRegion(background, 0, 0,640, 480);
+        myBg.flip(false, true);
 
-        gokuDown = new TextureRegion(texture, 136, 0, 17, 12);
-        gokuDown.flip(false, true);
+        gokuFlying1 = new Texture(Gdx.files.internal("data/goku1.png"));
+        gokuFlying1.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
-        goku = new TextureRegion(texture, 153, 0, 17, 12);
-        goku.flip(false, true);
+        gF1 = new TextureRegion(gokuFlying1, 0, 0, 81, 62);
+        gF1.flip(false, true);
 
-        gokuUp = new TextureRegion(texture, 170, 0, 17, 12);
-        gokuUp.flip(false, true);
+        gokuFlying2 = new Texture(Gdx.files.internal("data/goku2.png"));
+        gokuFlying2.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 
-        TextureRegion[] goku = {gokuDown, goku, gokuUp};
-        gokuAnimation = new Animation(0.06f, goku);
+        gF2 = new TextureRegion(gokuFlying2, 0, 0, 81, 62);
+        gF2.flip(false, true);
+
+        gokuFlying3 = new Texture(Gdx.files.internal("data/goku3.png"));
+        gokuFlying3.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+
+        gF3 = new TextureRegion(gokuFlying3, 0, 0, 81, 62);
+        gF3.flip(false, true);
+
+        gokuFlying4 = new Texture(Gdx.files.internal("data/goku4.png"));
+        gokuFlying4.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+
+        gF4 = new TextureRegion(gokuFlying4, 0, 0, 81, 62);
+        gF4.flip(false, true);
+
+        //bg = new TextureRegion(texture, 0, 0, 136, 43);
+        //bg.flip(false, true);
+
+        //grass = new TextureRegion(texture, 0, 43, 143, 11);
+        //grass.flip(false, true);
+        // 9, 23 , 54, 40
+
+
+        TextureRegion[] gokuState = { gF1, gF2, gF3, gF4 };
+        gokuAnimation = new Animation(0.06f, gokuState);
         gokuAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
-        skullUp = new TextureRegion(texture, 192, 0, 24, 14);
+        //skullUp = new TextureRegion(texture, 192, 0, 24, 14);
         // Create by flipping existing skullUp
-        skullDown = new TextureRegion(skullUp);
-        skullDown.flip(false, true);
+        //skullDown = new TextureRegion(skullUp);
+        //skullDown.flip(false, true);
 
-        bar = new TextureRegion(texture, 136, 16, 22, 3);
-        bar.flip(false, true);
+        //bar = new TextureRegion(texture, 136, 16, 22, 3);
+        //bar.flip(false, true);
 
     }
 
     public static void dispose() {
         // We must dispose of the texture when we are finished.
-        texture.dispose();
+        background.dispose();
+        gokuFlying1.dispose();
+        gokuFlying2.dispose();
+        gokuFlying3.dispose();
+        gokuFlying4.dispose();
+
     }
 
 }

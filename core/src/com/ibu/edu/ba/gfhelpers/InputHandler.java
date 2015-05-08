@@ -3,6 +3,7 @@ package com.ibu.edu.ba.gfhelpers;
 /**
  * Created by Omer on 6.5.2015.
  */
+
 import com.badlogic.gdx.InputProcessor;
 import com.ibu.edu.ba.gameobjects.Goku;
 

@@ -21,15 +21,15 @@ public class Goku {
         this.height = height;
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
-        acceleration = new Vector2(0, 460);
+        acceleration = new Vector2(0, 360);
     }
 
     public void update(float delta) {
 
         velocity.add(acceleration.cpy().scl(delta));
 
-        if (velocity.y > 200) {
-            velocity.y = 200;
+        if (velocity.y > 100) {
+            velocity.y = 100;
         }
 
         position.add(velocity.cpy().scl(delta));
@@ -37,7 +37,7 @@ public class Goku {
     }
 
     public void onClick() {
-        velocity.y = -140;
+        velocity.y = -100;
     }
 
     public float getX() {
