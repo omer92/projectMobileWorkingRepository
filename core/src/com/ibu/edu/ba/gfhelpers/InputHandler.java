@@ -4,22 +4,29 @@ package com.ibu.edu.ba.gfhelpers;
  * Created by Omer on 6.5.2015.
  */
 
+
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.ibu.edu.ba.gameobjects.Goku;
+import com.badlogic.gdx.InputAdapter;
 
-public class InputHandler implements InputProcessor {
+
+public class InputHandler extends InputAdapter implements InputProcessor  {
 
     private Goku myGoku;
 
+
     // Ask for a reference to the Goku when InputHandler is created.
     public InputHandler(Goku goku) {
+
         // myGoku now represents the gameWorld's goku.
         myGoku = goku;
+
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        myGoku.onClick();
+            myGoku.onClick();
         return true; // Return true to say we handled the touch.
     }
 

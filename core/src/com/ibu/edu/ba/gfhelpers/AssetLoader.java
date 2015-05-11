@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 public class AssetLoader {
 
     public static Texture background;
+    public static Texture texture;
 
     // Goku flying state still pictures
 
@@ -18,21 +19,25 @@ public class AssetLoader {
     public static Texture gokuFlying4;
 
 
-    public static TextureRegion myBg;
+    public static TextureRegion myBg, grass;
 
     public static Animation gokuAnimation;
     public static TextureRegion gF1, gF2, gF3, gF4;
 
-    //public static TextureRegion skullUp, skullDown, bar;
+    public static TextureRegion skullUp, skullDown, bar;
 
     public static void load() {
 
+        texture = new Texture(Gdx.files.internal("data/texture.png"));
+        texture.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+
         background = new Texture(Gdx.files.internal("data/background.jpg"));
-        background.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
+        background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
 
         myBg = new TextureRegion(background, 0, 0,640, 480);
         myBg.flip(false, true);
+
 
         gokuFlying1 = new Texture(Gdx.files.internal("data/goku1.png"));
         gokuFlying1.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
@@ -61,22 +66,22 @@ public class AssetLoader {
         //bg = new TextureRegion(texture, 0, 0, 136, 43);
         //bg.flip(false, true);
 
-        //grass = new TextureRegion(texture, 0, 43, 143, 11);
-        //grass.flip(false, true);
-        // 9, 23 , 54, 40
+        grass = new TextureRegion(texture, 0, 43, 143, 11);
+        grass.flip(false, true);
+
 
 
         TextureRegion[] gokuState = { gF1, gF2, gF3, gF4 };
         gokuAnimation = new Animation(0.06f, gokuState);
         gokuAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
-        //skullUp = new TextureRegion(texture, 192, 0, 24, 14);
+        skullUp = new TextureRegion(texture, 192, 0, 24, 14);
         // Create by flipping existing skullUp
-        //skullDown = new TextureRegion(skullUp);
-        //skullDown.flip(false, true);
+        skullDown = new TextureRegion(skullUp);
+        skullDown.flip(false, true);
 
-        //bar = new TextureRegion(texture, 136, 16, 22, 3);
-        //bar.flip(false, true);
+        bar = new TextureRegion(texture, 136, 16, 22, 3);
+        bar.flip(false, true);
 
     }
 

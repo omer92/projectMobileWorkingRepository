@@ -5,20 +5,28 @@ package com.ibu.edu.ba.gameworld;
  */
 
 import com.ibu.edu.ba.gameobjects.Goku;
+import com.ibu.edu.ba.gameobjects.ScrollHandler;
 
 public class GameWorld {
+
     private Goku goku;
+    private ScrollHandler scroller;
 
     public GameWorld(int midPointY) {
-        goku = new Goku(33, midPointY - 5, 17, 12);
+        goku = new Goku(18, midPointY - 5, 17, 12);
+        scroller = new ScrollHandler(midPointY + 66);
     }
 
     public void update(float delta) {
         goku.update(delta);
+        scroller.update(delta);
     }
 
     public Goku getGoku() {
         return goku;
 
+    }
+    public ScrollHandler getScroller() {
+        return scroller;
     }
 }
