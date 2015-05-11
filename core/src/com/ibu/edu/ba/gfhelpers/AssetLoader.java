@@ -76,6 +76,7 @@ public class AssetLoader {
         gokuAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
         skullUp = new TextureRegion(texture, 192, 0, 24, 14);
+
         // Create by flipping existing skullUp
         skullDown = new TextureRegion(skullUp);
         skullDown.flip(false, true);

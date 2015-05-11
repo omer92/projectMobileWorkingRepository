@@ -37,7 +37,6 @@ public class Goku {
         // Rotate counterclockwise
         if (velocity.y < 0) {
             rotation -= 600 * delta;
-
             if (rotation < -20) {
                 rotation = -20;
             }

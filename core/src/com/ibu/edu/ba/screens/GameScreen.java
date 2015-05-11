@@ -21,13 +21,13 @@ public class GameScreen implements Screen {
 
         float screenWidth = Gdx.graphics.getWidth();
         float screenHeight = Gdx.graphics.getHeight();
-        float gameWidth = 136;
+        float gameWidth = 280;
         float gameHeight = screenHeight / (screenWidth / gameWidth);
 
         int midPointY = (int) (gameHeight / 2);
 
         world = new GameWorld(midPointY);
-        renderer = new GameRenderer(world, (int) gameHeight, midPointY);
+        renderer = new GameRenderer(world, (int) gameWidth, (int) gameHeight, midPointY);
 
         Gdx.input.setInputProcessor(new InputHandler(world.getGoku()));
 

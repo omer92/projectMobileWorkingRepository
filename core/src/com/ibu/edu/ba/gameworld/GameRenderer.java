@@ -28,12 +28,13 @@ public class GameRenderer {
 
     private int midPointY;
     private int gameHeight;
+    private int gameWidth;
 
     //Game objects
     private Goku goku;
     private ScrollHandler scroller;
     private Grass frontGrass, backGrass;
-    private Pipe pipe1, pipe2, pipe3;
+    private Pipe pipe1, pipe2, pipe3, pipe4;
 
     //Game assets
     private TextureRegion myBg, grass;
@@ -41,14 +42,15 @@ public class GameRenderer {
     private TextureRegion gF1, gF2, gF3, gF4;
     private TextureRegion skullUp, skullDown, bar;
 
-    public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
+    public GameRenderer(GameWorld world, int gameWidth, int gameHeight, int midPointY) {
         myWorld = world;
 
         this.gameHeight = gameHeight;
+        this.gameWidth = gameWidth;
         this.midPointY = midPointY;
 
         cam = new OrthographicCamera();
-        cam.setToOrtho(true, 136, gameHeight);
+        cam.setToOrtho(true, gameWidth, gameHeight);
 
         batcher = new SpriteBatch();
         batcher.setProjectionMatrix(cam.combined);
@@ -68,6 +70,7 @@ public class GameRenderer {
         pipe1 = scroller.getPipe1();
         pipe2 = scroller.getPipe2();
         pipe3 = scroller.getPipe3();
+        pipe4 = scroller.getPipe4();
     }
 
     private void initAssets() {
@@ -109,6 +112,11 @@ public class GameRenderer {
                 pipe3.getY() + pipe3.getHeight() - 14, 24, 14);
         batcher.draw(skullDown, pipe3.getX() - 1,
                 pipe3.getY() + pipe3.getHeight() + 45, 24, 14);
+
+        batcher.draw(skullUp, pipe4.getX() - 1,
+                pipe4.getY() + pipe4.getHeight() - 14, 24, 14);
+        batcher.draw(skullDown, pipe4.getX() - 1,
+                pipe4.getY() + pipe4.getHeight() + 45, 24, 14);
     }
 
     private void drawPipes() {
@@ -128,6 +136,11 @@ public class GameRenderer {
                 pipe3.getHeight());
         batcher.draw(bar, pipe3.getX(), pipe3.getY() + pipe3.getHeight() + 45,
                 pipe3.getWidth(), midPointY + 66 - (pipe3.getHeight() + 45));
+
+        batcher.draw(bar, pipe4.getX(), pipe4.getY(), pipe4.getWidth(),
+                pipe4.getHeight());
+        batcher.draw(bar, pipe4.getX(), pipe4.getY() + pipe4.getHeight() + 45,
+                pipe4.getWidth(), midPointY + 66 - (pipe4.getHeight() + 45));
     }
 
     public void render(float runTime) {
