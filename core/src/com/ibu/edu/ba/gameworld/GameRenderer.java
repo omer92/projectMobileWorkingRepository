@@ -13,6 +13,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.ibu.edu.ba.gameobjects.Goku;
+import com.ibu.edu.ba.gameobjects.Grass;
+import com.ibu.edu.ba.gameobjects.Pipe;
+import com.ibu.edu.ba.gameobjects.ScrollHandler;
 import com.ibu.edu.ba.gfhelpers.AssetLoader;
 
 public class GameRenderer {
@@ -26,8 +29,13 @@ public class GameRenderer {
     private int midPointY;
     private int gameHeight;
 
+    //Game objects
     private Goku goku;
+    private ScrollHandler scroller;
+    private Grass frontGrass, backGrass;
+    private Pipe pipe1, pipe2, pipe3;
 
+    //Game assets
     private TextureRegion myBg, grass;
     private Animation gokuAnimation;
     private TextureRegion gF1, gF2, gF3, gF4;
@@ -47,8 +55,79 @@ public class GameRenderer {
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
 
+        // Call helper methods to initialize instance variables
         initGameObjects();
         initAssets();
+    }
+
+    private void initGameObjects() {
+        goku = myWorld.getGoku();
+        scroller = myWorld.getScroller();
+        frontGrass = scroller.getFrontGrass();
+        backGrass = scroller.getBackGrass();
+        pipe1 = scroller.getPipe1();
+        pipe2 = scroller.getPipe2();
+        pipe3 = scroller.getPipe3();
+    }
+
+    private void initAssets() {
+        myBg = AssetLoader.myBg;
+        grass = AssetLoader.grass;
+        gokuAnimation = AssetLoader.gokuAnimation;
+        gF1 = AssetLoader.gF1;
+        gF2 = AssetLoader.gF2;
+        gF3 = AssetLoader.gF3;
+        gF4 = AssetLoader.gF4;
+        skullUp = AssetLoader.skullUp;
+        skullDown = AssetLoader.skullDown;
+        bar = AssetLoader.bar;
+    }
+
+    private void drawGrass() {
+        // Draw the grass
+        batcher.draw(grass, frontGrass.getX(), frontGrass.getY(),
+                frontGrass.getWidth(), frontGrass.getHeight());
+        batcher.draw(grass, backGrass.getX(), backGrass.getY(),
+                backGrass.getWidth(), backGrass.getHeight());
+    }
+
+    private void drawSkulls() {
+        // Temporary code! Sorry about the mess :)
+        // I will fix this when I finish the Pipe class.
+
+        batcher.draw(skullUp, pipe1.getX() - 1,
+                pipe1.getY() + pipe1.getHeight() - 14, 24, 14);
+        batcher.draw(skullDown, pipe1.getX() - 1,
+                pipe1.getY() + pipe1.getHeight() + 45, 24, 14);
+
+        batcher.draw(skullUp, pipe2.getX() - 1,
+                pipe2.getY() + pipe2.getHeight() - 14, 24, 14);
+        batcher.draw(skullDown, pipe2.getX() - 1,
+                pipe2.getY() + pipe2.getHeight() + 45, 24, 14);
+
+        batcher.draw(skullUp, pipe3.getX() - 1,
+                pipe3.getY() + pipe3.getHeight() - 14, 24, 14);
+        batcher.draw(skullDown, pipe3.getX() - 1,
+                pipe3.getY() + pipe3.getHeight() + 45, 24, 14);
+    }
+
+    private void drawPipes() {
+        // Temporary code! Sorry about the mess :)
+        // I will fix this when I finish the Pipe class.
+        batcher.draw(bar, pipe1.getX(), pipe1.getY(), pipe1.getWidth(),
+                pipe1.getHeight());
+        batcher.draw(bar, pipe1.getX(), pipe1.getY() + pipe1.getHeight() + 45,
+                pipe1.getWidth(), midPointY + 66 - (pipe1.getHeight() + 45));
+
+        batcher.draw(bar, pipe2.getX(), pipe2.getY(), pipe2.getWidth(),
+                pipe2.getHeight());
+        batcher.draw(bar, pipe2.getX(), pipe2.getY() + pipe2.getHeight() + 45,
+                pipe2.getWidth(), midPointY + 66 - (pipe2.getHeight() + 45));
+
+        batcher.draw(bar, pipe3.getX(), pipe3.getY(), pipe3.getWidth(),
+                pipe3.getHeight());
+        batcher.draw(bar, pipe3.getX(), pipe3.getY() + pipe3.getHeight() + 45,
+                pipe3.getWidth(), midPointY + 66 - (pipe3.getHeight() + 45));
     }
 
     public void render(float runTime) {
@@ -67,8 +146,8 @@ public class GameRenderer {
         shapeRenderer.rect(0, midPointY + 66, 136, 11);
 
         // Draw Dirt
-        //shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
-        //shapeRenderer.rect(0, midPointY + 77, 136, 52);
+        shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
+        shapeRenderer.rect(0, midPointY + 77, 136, 52);
 
         shapeRenderer.end();
 
@@ -76,7 +155,12 @@ public class GameRenderer {
         batcher.disableBlending();
         batcher.draw(myBg, 0, 0, 140, 100);
 
+        drawGrass();
+
+        drawPipes();
         batcher.enableBlending();
+
+        drawSkulls();
 
         if (goku.shouldntFly()) {
             batcher.draw(gF2, goku.getX(), goku.getY(),
@@ -92,22 +176,5 @@ public class GameRenderer {
 
         batcher.end();
 
-    }
-
-    private void initGameObjects() {
-        goku = myWorld.getGoku();
-    }
-
-    private void initAssets() {
-        myBg = AssetLoader.myBg;
-        grass = AssetLoader.grass;
-        gokuAnimation = AssetLoader.gokuAnimation;
-        gF1 = AssetLoader.gF1;
-        gF2 = AssetLoader.gF2;
-        gF3 = AssetLoader.gF3;
-        gF4 = AssetLoader.gF4;
-        skullUp = AssetLoader.skullUp;
-        skullDown = AssetLoader.skullDown;
-        bar = AssetLoader.bar;
     }
 }
