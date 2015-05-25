@@ -11,14 +11,11 @@ import com.badlogic.gdx.math.Rectangle;
 public class Pipe extends Scrollable {
 
     private Random r;
-
     private Rectangle skullUp, skullDown, barUp, barDown;
-
     public static final int VERTICAL_GAP = 45;
     public static final int SKULL_WIDTH = 24;
     public static final int SKULL_HEIGHT = 11;
     private float groundY;
-
     private boolean isScored = false;
 
     public Pipe(float x, float y, int width, int height, float scrollSpeed, float groundY) {

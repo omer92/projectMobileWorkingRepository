@@ -1,6 +1,7 @@
 package com.ibu.edu.ba.gfhelpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
@@ -34,6 +35,8 @@ public class AssetLoader {
 
     public static BitmapFont font, shadow;
 
+    private static Preferences prefs;
+
     public static void load() {
 
         texture = new Texture(Gdx.files.internal("data/texture.png"));
@@ -43,7 +46,7 @@ public class AssetLoader {
         background.setWrap(Texture.TextureWrap.Repeat, Texture.TextureWrap.Repeat);
 
 
-        myBg = new TextureRegion(background, 0, 0,640, 480);
+        myBg = new TextureRegion(background, 0, 0, 640, 480);
         myBg.flip(false, true);
 
 
@@ -75,7 +78,7 @@ public class AssetLoader {
         grass.flip(false, true);
 
 
-        TextureRegion[] gokuState = { gF1, gF2, gF3, gF4 };
+        TextureRegion[] gokuState = {gF1, gF2, gF3, gF4};
         gokuAnimation = new Animation(0.06f, gokuState);
         gokuAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
 
@@ -101,6 +104,21 @@ public class AssetLoader {
         font.getData().setScale(.25f, -.25f);
         shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
         shadow.getData().setScale(.25f, -.25f);
+
+        // Create (or retrieve exciting) preferences file
+        prefs = Gdx.app.getPreferences("FlyingGoku");
+
+        if (!prefs.contains("highScore")) {
+            prefs.putInteger("highScore", 0);
+        }
+    }
+
+    public static void setHighScore(int val) {
+        prefs.putInteger("highScore", val);
+        prefs.flush();
+    }
+    public static int getHighScore() {
+        return prefs.getInteger("highScore");
     }
 
     public static void dispose() {

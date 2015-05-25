@@ -14,13 +14,10 @@ public class Goku {
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
-
-    private float rotation; // For handling goku rotation
+    private float rotation;
     private int width;
     private int height;
-
     private boolean isAlive;
-
     private Circle boundingCircle;
 
     public Goku(float x, float y, int width, int height) {

@@ -12,7 +12,6 @@ public class ScrollHandler {
     private Pipe pipe1, pipe2, pipe3, pipe4;
     public static final int SCROLL_SPEED = -59;
     public static final int PIPE_GAP = 39;
-
     private GameWorld gameWorld;
 
     public ScrollHandler(GameWorld gameWorld, float yPos) {
@@ -131,5 +130,14 @@ public class ScrollHandler {
     }
 
     public Pipe getPipe4() { return pipe4; }
+
+    public void onRestart() {
+        frontGrass.onRestart(0, SCROLL_SPEED);
+        backGrass.onRestart(frontGrass.getTailX(), SCROLL_SPEED);
+        pipe1.onRestart(210, SCROLL_SPEED);
+        pipe2.onRestart(pipe1.getTailX() + PIPE_GAP, SCROLL_SPEED);
+        pipe3.onRestart(pipe2.getTailX() + PIPE_GAP, SCROLL_SPEED);
+        pipe4.onRestart(pipe3.getTailX() + PIPE_GAP, SCROLL_SPEED);
+    }
 
 }
