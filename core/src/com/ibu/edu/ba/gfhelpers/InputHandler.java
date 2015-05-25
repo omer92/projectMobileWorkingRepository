@@ -31,7 +31,7 @@ public class InputHandler implements InputProcessor  {
 
         myGoku.onClick();
 
-        if (myWorld.isGameOver()) {
+        if (myWorld.isGameOver() || myWorld.isHighScore()) {
             // Reset all variables, go to GameState.READY
             myWorld.restart();
         }

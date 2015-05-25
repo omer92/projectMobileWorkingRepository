@@ -1,9 +1,5 @@
 package com.ibu.edu.ba.gameworld;
 
-/**
- * Created by Omer on 6.5.2015.
- */
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -162,7 +158,7 @@ public class GameRenderer {
 
         batcher.begin();
         batcher.disableBlending();
-        batcher.draw(myBg, 0, 0, 140, 100);
+        batcher.draw(myBg, 0, 0, 300, 150);
 
         drawGrass();
 
@@ -183,23 +179,40 @@ public class GameRenderer {
                     1, 1, goku.getRotation());
         }
 
-        // TEMPORARY CODE! We will fix this section later:
+        // TEMPORARY CODE! I will fix this section later:
 
         if (myWorld.isReady()) {
             // Draw shadow first
-            AssetLoader.shadow.draw(batcher, "Touch me", (300 / 2)
+            AssetLoader.shadow.draw(batcher, "Tap to play", (280 / 2)
                     - (42), 76);
             // Draw text
-            AssetLoader.font.draw(batcher, "Touch me", (300 / 2)
+            AssetLoader.font.draw(batcher, "Tap to play", (280 / 2)
                     - (42 - 1), 75);
         } else {
 
-            if (myWorld.isGameOver()) {
-                AssetLoader.shadow.draw(batcher, "Game Over", 300, 56);
-                AssetLoader.font.draw(batcher, "Game Over", 299, 55);
+            if (myWorld.isGameOver() || myWorld.isHighScore()) {
+                if (myWorld.isGameOver()) {
+                    AssetLoader.shadow.draw(batcher, "Game Over", 100, 56);
+                    AssetLoader.font.draw(batcher, "Game Over", 99, 55);
 
-                AssetLoader.shadow.draw(batcher, "Try again?", 300, 76);
-                AssetLoader.font.draw(batcher, "Try again?", 299, 75);
+                    AssetLoader.shadow.draw(batcher, "High Score:", 98, 106);
+                    AssetLoader.font.draw(batcher, "High Score:", 99, 105);
+
+                    String highScore = AssetLoader.getHighScore() + "";
+
+                    // Draw shadow first
+                    AssetLoader.shadow.draw(batcher, highScore, (280 / 2)
+                            - (3 * highScore.length()), 128);
+                    // Draw text
+                    AssetLoader.font.draw(batcher, highScore, (280 / 2)
+                            - (3 * highScore.length() - 1), 127);
+                } else {
+                    AssetLoader.shadow.draw(batcher, "High Score!", 98, 56);
+                    AssetLoader.font.draw(batcher, "High Score!", 99, 55);
+                }
+
+                AssetLoader.shadow.draw(batcher, "Try again?", 98, 76);
+                AssetLoader.font.draw(batcher, "Try again?", 99, 75);
 
             }
 
