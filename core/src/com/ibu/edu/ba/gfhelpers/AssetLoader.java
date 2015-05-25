@@ -1,6 +1,7 @@
 package com.ibu.edu.ba.gfhelpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -25,6 +26,9 @@ public class AssetLoader {
     public static TextureRegion gF1, gF2, gF3, gF4;
 
     public static TextureRegion skullUp, skullDown, bar;
+
+    public static Sound dead;
+    public static Sound theme;
 
     public static void load() {
 
@@ -63,9 +67,6 @@ public class AssetLoader {
         gF4 = new TextureRegion(gokuFlying4, 0, 0, 81, 62);
         gF4.flip(false, true);
 
-        //bg = new TextureRegion(texture, 0, 0, 136, 43);
-        //bg.flip(false, true);
-
         grass = new TextureRegion(texture, 0, 43, 143, 11);
         grass.flip(false, true);
 
@@ -83,6 +84,9 @@ public class AssetLoader {
 
         bar = new TextureRegion(texture, 136, 16, 22, 3);
         bar.flip(false, true);
+
+        dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
+        theme = Gdx.audio.newSound(Gdx.files.internal("data/theme.wav"));
 
     }
 

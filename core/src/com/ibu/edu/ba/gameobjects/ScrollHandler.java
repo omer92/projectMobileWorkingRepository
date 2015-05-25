@@ -11,8 +11,8 @@ public class ScrollHandler {
     public static final int PIPE_GAP = 39;
 
     public ScrollHandler(float yPos) {
-        frontGrass = new Grass(0, yPos, 143, 11, SCROLL_SPEED);
-        backGrass = new Grass(frontGrass.getTailX(), yPos, 143, 11,
+        frontGrass = new Grass(0, yPos, 300, 11, SCROLL_SPEED);
+        backGrass = new Grass(frontGrass.getTailX(), yPos, 300, 11,
                 SCROLL_SPEED);
 
         pipe1 = new Pipe(210, 0, 22, 60, SCROLL_SPEED, yPos);
@@ -61,6 +61,7 @@ public class ScrollHandler {
         pipe1.stop();
         pipe2.stop();
         pipe3.stop();
+        pipe4.stop();
     }
 
     public boolean collides(Goku goku) {
