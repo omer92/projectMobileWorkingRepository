@@ -167,7 +167,7 @@ public class GameRenderer {
 
         batcher.begin();
         batcher.disableBlending();
-        batcher.draw(myBg, 0, midPointY + 23, 140, 100);
+        batcher.draw(myBg, 0,0, 140, 100);
 
         drawGrass();
 

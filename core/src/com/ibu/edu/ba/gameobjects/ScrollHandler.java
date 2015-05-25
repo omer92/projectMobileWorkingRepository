@@ -18,7 +18,7 @@ public class ScrollHandler {
         pipe1 = new Pipe(210, 0, 22, 60, SCROLL_SPEED, yPos);
         pipe2 = new Pipe(pipe1.getTailX() + PIPE_GAP, 0, 22, 70, SCROLL_SPEED, yPos);
         pipe3 = new Pipe(pipe2.getTailX() + PIPE_GAP, 0, 22, 60, SCROLL_SPEED, yPos);
-        pipe4 = new Pipe(pipe3.getTailX() + PIPE_GAP, 0, 22, 40, SCROLL_SPEED, yPos);
+        pipe4 = new Pipe(pipe3.getTailX() + PIPE_GAP, 0, 22, 50, SCROLL_SPEED, yPos);
     }
 
     public void update(float delta) {
@@ -53,6 +53,19 @@ public class ScrollHandler {
             backGrass.reset(frontGrass.getTailX());
 
         }
+    }
+
+    public void stop() {
+        frontGrass.stop();
+        backGrass.stop();
+        pipe1.stop();
+        pipe2.stop();
+        pipe3.stop();
+    }
+
+    public boolean collides(Goku goku) {
+        return (pipe1.collides(goku) || pipe2.collides(goku) || pipe3
+                .collides(goku) || pipe4.collides(goku));
     }
 
     public Grass getFrontGrass() {

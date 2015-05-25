@@ -5,6 +5,7 @@ package com.ibu.edu.ba.gameobjects;
  */
 import java.util.Random;
 
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Pipe extends Scrollable {
@@ -18,12 +19,9 @@ public class Pipe extends Scrollable {
     public static final int SKULL_HEIGHT = 11;
     private float groundY;
 
-
-    // When Pipe's constructor is invoked, invoke the super (Scrollable)
-    // constructor
     public Pipe(float x, float y, int width, int height, float scrollSpeed, float groundY) {
         super(x, y, width, height, scrollSpeed);
-        // Initialize a Random object for Random number generation
+
         r = new Random();
         skullUp = new Rectangle();
         skullDown = new Rectangle();
@@ -58,7 +56,6 @@ public class Pipe extends Scrollable {
 
     }
 
-
     @Override
     public void reset(float newX) {
         // Call the reset method in the superclass (Scrollable)
@@ -81,6 +78,16 @@ public class Pipe extends Scrollable {
 
     public Rectangle getBarDown() {
         return barDown;
+    }
+
+    public boolean collides(Goku goku) {
+        if (position.x < goku.getX() + goku.getWidth()) {
+            return (Intersector.overlaps(goku.getBoundingCircle(), barUp)
+                    || Intersector.overlaps(goku.getBoundingCircle(), barDown)
+                    || Intersector.overlaps(goku.getBoundingCircle(), skullUp) || Intersector
+                    .overlaps(goku.getBoundingCircle(), skullDown));
+        }
+        return false;
     }
 
 }
