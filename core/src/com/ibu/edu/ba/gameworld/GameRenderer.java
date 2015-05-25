@@ -183,6 +183,17 @@ public class GameRenderer {
                     1, 1, goku.getRotation());
         }
 
+        // Convert integer into String
+        String score = myWorld.getScore() + "";
+
+        // Draw shadow first
+        AssetLoader.shadow.draw(batcher, "" + myWorld.getScore(), (300 / 2)
+            - (3 * score.length() - 1), 12);
+
+        // Draw text
+        AssetLoader.font.draw(batcher, "" + myWorld.getScore(), (300 / 2)
+                - (3 * score.length() - 1), 11);
+
         batcher.end();
     }
 }
