@@ -6,6 +6,7 @@ package com.ibu.edu.ba.gameobjects;
 
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+import com.ibu.edu.ba.gfhelpers.AssetLoader;
 
 
 public class Goku {
@@ -18,6 +19,8 @@ public class Goku {
     private int width;
     private int height;
 
+    private boolean isAlive;
+
     private Circle boundingCircle;
 
     public Goku(float x, float y, int width, int height) {
@@ -25,22 +28,23 @@ public class Goku {
         this.height = height;
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
-        acceleration = new Vector2(0, 360);
+        acceleration = new Vector2(0, 460);
         boundingCircle = new Circle();
+        isAlive = true;
     }
 
     public void update(float delta) {
 
         velocity.add(acceleration.cpy().scl(delta));
 
-        if (velocity.y > 100) {
-            velocity.y = 100;
+        if (velocity.y > 150) {
+            velocity.y = 150;
         }
 
         position.add(velocity.cpy().scl(delta));
 
         // Setting the circle
-        boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
+        boundingCircle.set(position.x + 9, position.y + 6, 6.0f);
 
         // Rotate counterclockwise
         if (velocity.y < 0) {
@@ -52,7 +56,7 @@ public class Goku {
         }
 
         // Rotate clockwise
-        if (isFalling()) {
+        if (isFalling() || !isAlive) {
             rotation += 480 * delta;
             if (rotation > 90) {
                 rotation = 90;
@@ -73,7 +77,18 @@ public class Goku {
     }
 
     public void onClick() {
-        velocity.y = -100;
+        if (isAlive) {
+            velocity.y = -100;
+        }
+    }
+
+    public void die() {
+        isAlive = false;
+        velocity.y = 0;
+    }
+
+    public void decelerate() {
+        acceleration.y = 0;
     }
 
     public float getX() {
@@ -97,5 +112,9 @@ public class Goku {
     }
 
     public Circle getBoundingCircle() { return boundingCircle; }
+
+    public boolean isAlive() {
+        return isAlive;
+    }
 
 }

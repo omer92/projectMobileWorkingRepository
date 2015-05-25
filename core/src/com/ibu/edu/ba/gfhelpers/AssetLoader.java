@@ -1,10 +1,12 @@
 package com.ibu.edu.ba.gfhelpers;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class AssetLoader {
@@ -27,8 +29,10 @@ public class AssetLoader {
 
     public static TextureRegion skullUp, skullDown, bar;
 
-    public static Sound dead;
-    public static Sound theme;
+    public static Sound dead, fly, coin;
+    public static Music theme;
+
+    public static BitmapFont font, shadow;
 
     public static void load() {
 
@@ -71,7 +75,6 @@ public class AssetLoader {
         grass.flip(false, true);
 
 
-
         TextureRegion[] gokuState = { gF1, gF2, gF3, gF4 };
         gokuAnimation = new Animation(0.06f, gokuState);
         gokuAnimation.setPlayMode(Animation.PlayMode.LOOP_PINGPONG);
@@ -85,19 +88,36 @@ public class AssetLoader {
         bar = new TextureRegion(texture, 136, 16, 22, 3);
         bar.flip(false, true);
 
-        dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
-        theme = Gdx.audio.newSound(Gdx.files.internal("data/theme.wav"));
+        theme = Gdx.audio.newMusic(Gdx.files.internal("data/theme.wav"));
+        theme.play();
+        theme.setLooping(true);
+        theme.setVolume(0.5f);
 
+        dead = Gdx.audio.newSound(Gdx.files.internal("data/dead.wav"));
+        fly = Gdx.audio.newSound(Gdx.files.internal("data/fly.wav"));
+        coin = Gdx.audio.newSound(Gdx.files.internal("data/coin.wav"));
+
+        font = new BitmapFont(Gdx.files.internal("data/text.fnt"));
+        font.getData().setScale(.25f, -.25f);
+        shadow = new BitmapFont(Gdx.files.internal("data/shadow.fnt"));
+        shadow.getData().setScale(.25f, -.25f);
     }
 
     public static void dispose() {
         // We must dispose of the texture when we are finished.
         background.dispose();
+        texture.dispose();
         gokuFlying1.dispose();
         gokuFlying2.dispose();
         gokuFlying3.dispose();
         gokuFlying4.dispose();
 
+        dead.dispose();
+        fly.dispose();
+        coin.dispose();
+
+        font.dispose();
+        shadow.dispose();
     }
 
 }

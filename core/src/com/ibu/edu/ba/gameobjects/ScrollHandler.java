@@ -3,6 +3,9 @@ package com.ibu.edu.ba.gameobjects;
 /**
  * Created by Omer on 11.5.2015.
  */
+import com.ibu.edu.ba.gameworld.GameWorld;
+import com.ibu.edu.ba.gfhelpers.AssetLoader;
+
 public class ScrollHandler {
 
     private Grass frontGrass, backGrass;
@@ -10,15 +13,21 @@ public class ScrollHandler {
     public static final int SCROLL_SPEED = -59;
     public static final int PIPE_GAP = 39;
 
-    public ScrollHandler(float yPos) {
+    private GameWorld gameWorld;
+
+    public ScrollHandler(GameWorld gameWorld, float yPos) {
+        this.gameWorld = gameWorld;
         frontGrass = new Grass(0, yPos, 300, 11, SCROLL_SPEED);
         backGrass = new Grass(frontGrass.getTailX(), yPos, 300, 11,
                 SCROLL_SPEED);
 
         pipe1 = new Pipe(210, 0, 22, 60, SCROLL_SPEED, yPos);
-        pipe2 = new Pipe(pipe1.getTailX() + PIPE_GAP, 0, 22, 70, SCROLL_SPEED, yPos);
-        pipe3 = new Pipe(pipe2.getTailX() + PIPE_GAP, 0, 22, 60, SCROLL_SPEED, yPos);
-        pipe4 = new Pipe(pipe3.getTailX() + PIPE_GAP, 0, 22, 50, SCROLL_SPEED, yPos);
+        pipe2 = new Pipe(pipe1.getTailX() + PIPE_GAP, 0, 22, 70, SCROLL_SPEED,
+                yPos);
+        pipe3 = new Pipe(pipe2.getTailX() + PIPE_GAP, 0, 22, 60, SCROLL_SPEED,
+                yPos);
+        pipe4 = new Pipe(pipe3.getTailX() + PIPE_GAP, 0, 22, 50, SCROLL_SPEED,
+                yPos);
     }
 
     public void update(float delta) {
@@ -65,8 +74,38 @@ public class ScrollHandler {
     }
 
     public boolean collides(Goku goku) {
+
+        if (!pipe1.isScored()
+                && pipe1.getX() + (pipe1.getWidth() / 2) < goku.getX()
+                    + goku.getWidth()) {
+            addScore(1);
+            pipe1.setScored(true);
+            AssetLoader.coin.play();
+        } else if (!pipe2.isScored()
+                && pipe2.getX() + (pipe2.getWidth() / 2) < goku.getX()
+            + goku.getWidth()) {
+            addScore(1);
+            pipe2.setScored(true);
+            AssetLoader.coin.play();
+        } else if (!pipe3.isScored()
+                && pipe3.getX() + (pipe3.getWidth() / 2) < goku.getX()
+            + goku.getWidth()) {
+            addScore(1);
+            pipe3.setScored(true);
+            AssetLoader.coin.play();
+        }  else if (!pipe4.isScored()
+                && pipe4.getX() + (pipe4.getWidth() / 2) < goku.getX()
+            + goku.getWidth()) {
+            addScore(1);
+            pipe4.setScored(true);
+            AssetLoader.coin.play();
+        }
+
         return (pipe1.collides(goku) || pipe2.collides(goku) || pipe3
                 .collides(goku) || pipe4.collides(goku));
+    }
+    private void addScore(int increment) {
+        gameWorld.addScore(increment);
     }
 
     public Grass getFrontGrass() {
