@@ -21,7 +21,7 @@ public class Pipe extends Scrollable {
 
     // When Pipe's constructor is invoked, invoke the super (Scrollable)
     // constructor
-    public Pipe(float x, float y, int width, int height, float scrollSpeed) {
+    public Pipe(float x, float y, int width, int height, float scrollSpeed, float groundY) {
         super(x, y, width, height, scrollSpeed);
         // Initialize a Random object for Random number generation
         r = new Random();

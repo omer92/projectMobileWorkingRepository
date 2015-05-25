@@ -96,4 +96,6 @@ public class Goku {
         return rotation;
     }
 
+    public Circle getBoundingCircle() { return boundingCircle; }
+
 }
