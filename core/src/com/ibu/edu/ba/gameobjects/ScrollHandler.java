@@ -8,7 +8,7 @@ public class ScrollHandler {
     private Grass frontGrass, backGrass;
     private Pipe pipe1, pipe2, pipe3, pipe4;
     public static final int SCROLL_SPEED = -59;
-    public static final int PIPE_GAP = 49;
+    public static final int PIPE_GAP = 39;
 
     public ScrollHandler(float yPos) {
         frontGrass = new Grass(0, yPos, 143, 11, SCROLL_SPEED);

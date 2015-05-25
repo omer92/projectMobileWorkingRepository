@@ -4,7 +4,9 @@ package com.ibu.edu.ba.gameobjects;
  * Created by Omer on 6.5.2015.
  */
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
+
 
 public class Goku {
 
@@ -16,12 +18,15 @@ public class Goku {
     private int width;
     private int height;
 
+    private Circle boundingCircle;
+
     public Goku(float x, float y, int width, int height) {
         this.width = width;
         this.height = height;
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
         acceleration = new Vector2(0, 360);
+        boundingCircle = new Circle();
     }
 
     public void update(float delta) {
@@ -34,9 +39,13 @@ public class Goku {
 
         position.add(velocity.cpy().scl(delta));
 
+        // Setting the circle
+        boundingCircle.set(position.x + 9, position.y + 6, 6.5f);
+
         // Rotate counterclockwise
         if (velocity.y < 0) {
             rotation -= 600 * delta;
+
             if (rotation < -20) {
                 rotation = -20;
             }
