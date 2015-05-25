@@ -64,6 +64,7 @@ public class ScrollHandler {
         }
     }
 
+
     public void stop() {
         frontGrass.stop();
         backGrass.stop();
@@ -107,6 +108,7 @@ public class ScrollHandler {
     private void addScore(int increment) {
         gameWorld.addScore(increment);
     }
+
 
     public Grass getFrontGrass() {
         return frontGrass;

@@ -41,10 +41,16 @@ public class Goku {
             velocity.y = 150;
         }
 
+        // Ceiling check
+        if (position.y < -13) {
+            position.y = -13;
+            velocity.y = 0;
+        }
+
         position.add(velocity.cpy().scl(delta));
 
         // Setting the circle
-        boundingCircle.set(position.x + 9, position.y + 6, 6.0f);
+        boundingCircle.set(position.x + 9, position.y + 6, 5.0f);
 
         // Rotate counterclockwise
         if (velocity.y < 0) {
@@ -73,12 +79,13 @@ public class Goku {
     }
 
     public boolean shouldntFly() {
-        return velocity.y > 70;
+        return velocity.y > 70 || !isAlive;
     }
 
     public void onClick() {
         if (isAlive) {
-            velocity.y = -100;
+            AssetLoader.fly.play();
+            velocity.y = -150;
         }
     }
 
@@ -89,6 +96,16 @@ public class Goku {
 
     public void decelerate() {
         acceleration.y = 0;
+    }
+
+    public void onRestart(int y) {
+        rotation = 0;
+        position.y = y;
+        velocity.x = 0;
+        velocity.y = 0;
+        acceleration.x = 0;
+        acceleration.y = 460;
+        isAlive = true;
     }
 
     public float getX() {

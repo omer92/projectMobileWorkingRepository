@@ -183,16 +183,37 @@ public class GameRenderer {
                     1, 1, goku.getRotation());
         }
 
-        // Convert integer into String
-        String score = myWorld.getScore() + "";
+        // TEMPORARY CODE! We will fix this section later:
 
-        // Draw shadow first
-        AssetLoader.shadow.draw(batcher, "" + myWorld.getScore(), (300 / 2)
-            - (3 * score.length() - 1), 12);
+        if (myWorld.isReady()) {
+            // Draw shadow first
+            AssetLoader.shadow.draw(batcher, "Touch me", (300 / 2)
+                    - (42), 76);
+            // Draw text
+            AssetLoader.font.draw(batcher, "Touch me", (300 / 2)
+                    - (42 - 1), 75);
+        } else {
 
-        // Draw text
-        AssetLoader.font.draw(batcher, "" + myWorld.getScore(), (300 / 2)
-                - (3 * score.length() - 1), 11);
+            if (myWorld.isGameOver()) {
+                AssetLoader.shadow.draw(batcher, "Game Over", 300, 56);
+                AssetLoader.font.draw(batcher, "Game Over", 299, 55);
+
+                AssetLoader.shadow.draw(batcher, "Try again?", 300, 76);
+                AssetLoader.font.draw(batcher, "Try again?", 299, 75);
+
+            }
+
+            // Convert integer into String
+            String score = myWorld.getScore() + "";
+
+            // Draw shadow first
+            AssetLoader.shadow.draw(batcher, "" + myWorld.getScore(), (300 / 2)
+                    - (3 * score.length() - 1), 12);
+
+            // Draw text
+            AssetLoader.font.draw(batcher, "" + myWorld.getScore(), (300 / 2)
+                    - (3 * score.length() - 1), 11);
+        }
 
         batcher.end();
     }
