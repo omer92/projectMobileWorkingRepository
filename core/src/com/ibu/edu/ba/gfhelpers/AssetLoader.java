@@ -130,6 +130,8 @@ public class AssetLoader {
         gokuFlying3.dispose();
         gokuFlying4.dispose();
 
+        theme.dispose();
+
         dead.dispose();
         fly.dispose();
         coin.dispose();

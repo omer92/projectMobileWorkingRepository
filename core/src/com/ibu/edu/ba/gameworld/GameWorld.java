@@ -28,7 +28,7 @@ public class GameWorld {
     public GameWorld(int midPointY) {
         currentState = GameState.READY;
         this.midPointY = midPointY;
-        goku = new Goku(43, midPointY - 5, 17, 12);
+        goku = new Goku(43, midPointY - 5, 22, 17);
         scroller = new ScrollHandler(this, midPointY + 66);
         ground = new Rectangle(0, midPointY + 66, 137, 11);
     }

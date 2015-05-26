@@ -25,7 +25,7 @@ public class Goku {
         this.height = height;
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
-        acceleration = new Vector2(0, 460);
+        acceleration = new Vector2(0, 440);
         boundingCircle = new Circle();
         isAlive = true;
     }
@@ -34,8 +34,8 @@ public class Goku {
 
         velocity.add(acceleration.cpy().scl(delta));
 
-        if (velocity.y > 150) {
-            velocity.y = 150;
+        if (velocity.y > 125) {
+            velocity.y = 125;
         }
 
         // Ceiling check
@@ -82,7 +82,7 @@ public class Goku {
     public void onClick() {
         if (isAlive) {
             AssetLoader.fly.play();
-            velocity.y = -150;
+            velocity.y = -125;
         }
     }
 
@@ -101,7 +101,7 @@ public class Goku {
         velocity.x = 0;
         velocity.y = 0;
         acceleration.x = 0;
-        acceleration.y = 460;
+        acceleration.y = 440;
         isAlive = true;
     }
 
