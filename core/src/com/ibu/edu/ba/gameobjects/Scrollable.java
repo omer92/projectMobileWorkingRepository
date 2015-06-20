@@ -1,8 +1,5 @@
 package com.ibu.edu.ba.gameobjects;
 
-/**
- * Created by Omer on 11.5.2015.
- */
 import com.badlogic.gdx.math.Vector2;
 
 public class Scrollable {

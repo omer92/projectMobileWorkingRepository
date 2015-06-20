@@ -1,6 +1,13 @@
 package com.ibu.edu.ba.gameworld;
 
+import java.util.List;
+
+import aurelienribon.tweenengine.Tween;
+import aurelienribon.tweenengine.TweenEquations;
+import aurelienribon.tweenengine.TweenManager;
+
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -12,7 +19,11 @@ import com.ibu.edu.ba.gameobjects.Goku;
 import com.ibu.edu.ba.gameobjects.Grass;
 import com.ibu.edu.ba.gameobjects.Pipe;
 import com.ibu.edu.ba.gameobjects.ScrollHandler;
+import com.ibu.edu.ba.TweenAccessors.Value;
+import com.ibu.edu.ba.TweenAccessors.ValueAccessor;
 import com.ibu.edu.ba.gfhelpers.AssetLoader;
+import com.ibu.edu.ba.gfhelpers.InputHandler;
+import com.ibu.edu.ba.ui.SimpleButton;
 
 public class GameRenderer {
 
@@ -23,8 +34,6 @@ public class GameRenderer {
     private SpriteBatch batcher;
 
     private int midPointY;
-    private int gameHeight;
-    private int gameWidth;
 
     //Game objects
     private Goku goku;
@@ -33,29 +42,39 @@ public class GameRenderer {
     private Pipe pipe1, pipe2, pipe3, pipe4;
 
     //Game assets
-    private TextureRegion myBg, grass;
+    private TextureRegion myBg, grass, gF2, skullUp, skullDown, bar, ready,
+            myTitle, gameOver, highScore, scoreboard, star, noStar, retry;
     private Animation gokuAnimation;
-    private TextureRegion gF1, gF2, gF3, gF4;
-    private TextureRegion skullUp, skullDown, bar;
 
-    public GameRenderer(GameWorld world, int gameWidth, int gameHeight, int midPointY) {
+    // Tween stuff
+    private TweenManager manager;
+    private Value alpha = new Value();
+
+    // Buttons
+    private List<SimpleButton> menuButtons;
+    private Color transitionColor;
+
+    public GameRenderer(GameWorld world, int gameHeight, int midPointY) {
         myWorld = world;
 
-        this.gameHeight = gameHeight;
-        this.gameWidth = gameWidth;
         this.midPointY = midPointY;
+        this.menuButtons = ((InputHandler) Gdx.input.getInputProcessor())
+                .getMenuButtons();
 
         cam = new OrthographicCamera();
-        cam.setToOrtho(true, gameWidth, gameHeight);
+        cam.setToOrtho(true, 220, gameHeight);
 
         batcher = new SpriteBatch();
         batcher.setProjectionMatrix(cam.combined);
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(cam.combined);
 
-        // Call helper methods to initialize instance variables
         initGameObjects();
         initAssets();
+
+        transitionColor = new Color();
+        prepareTransition(255, 255, 255, .5f);
+
     }
 
     private void initGameObjects() {
@@ -73,13 +92,18 @@ public class GameRenderer {
         myBg = AssetLoader.myBg;
         grass = AssetLoader.grass;
         gokuAnimation = AssetLoader.gokuAnimation;
-        gF1 = AssetLoader.gF1;
         gF2 = AssetLoader.gF2;
-        gF3 = AssetLoader.gF3;
-        gF4 = AssetLoader.gF4;
         skullUp = AssetLoader.skullUp;
         skullDown = AssetLoader.skullDown;
         bar = AssetLoader.bar;
+        ready = AssetLoader.ready;
+        myTitle = AssetLoader.myTitle;
+        gameOver = AssetLoader.gameOver;
+        highScore = AssetLoader.highScore;
+        scoreboard = AssetLoader.scoreboard;
+        retry = AssetLoader.retry;
+        star = AssetLoader.star;
+        noStar = AssetLoader.noStar;
     }
 
     private void drawGrass() {
@@ -91,8 +115,6 @@ public class GameRenderer {
     }
 
     private void drawSkulls() {
-        // Temporary code! Sorry about the mess :)
-        // I will fix this when I finish the Pipe class.
 
         batcher.draw(skullUp, pipe1.getX() - 1,
                 pipe1.getY() + pipe1.getHeight() - 14, 24, 14);
@@ -116,8 +138,7 @@ public class GameRenderer {
     }
 
     private void drawPipes() {
-        // Temporary code! Sorry about the mess :)
-        // I will fix this when I finish the Pipe class.
+
         batcher.draw(bar, pipe1.getX(), pipe1.getY(), pipe1.getWidth(),
                 pipe1.getHeight());
         batcher.draw(bar, pipe1.getX(), pipe1.getY() + pipe1.getHeight() + 45,
@@ -139,33 +160,13 @@ public class GameRenderer {
                 pipe4.getWidth(), midPointY + 66 - (pipe4.getHeight() + 45));
     }
 
-    public void render(float runTime) {
+    private void drawGokuCentered(float runTime) {
+        batcher.draw(gokuAnimation.getKeyFrame(runTime), 59, goku.getY() - 15,
+                goku.getWidth() / 2.0f, goku.getHeight() / 2.0f,
+                goku.getWidth(), goku.getHeight(), 1, 1, goku.getRotation());
+    }
 
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        shapeRenderer.begin(ShapeType.Filled);
-
-        // Draw Grass
-        shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
-        shapeRenderer.rect(0, midPointY + 66, 300, 11);
-
-        // Draw Dirt
-        shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
-        shapeRenderer.rect(0, midPointY + 77, 300, 52);
-
-        shapeRenderer.end();
-
-        batcher.begin();
-        batcher.disableBlending();
-        batcher.draw(myBg, 0, 0, 300, 150);
-
-        drawGrass();
-
-        drawPipes();
-        batcher.enableBlending();
-
-        drawSkulls();
+    private void drawGoku(float runTime) {
 
         if (goku.shouldntFly()) {
             batcher.draw(gF2, goku.getX(), goku.getY(),
@@ -179,55 +180,162 @@ public class GameRenderer {
                     1, 1, goku.getRotation());
         }
 
-        // TEMPORARY CODE! I will fix this section later:
+    }
 
-        if (myWorld.isReady()) {
-            // Draw shadow first
-            AssetLoader.shadow.draw(batcher, "Tap to play", (280 / 2)
-                    - (42), 76);
-            // Draw text
-            AssetLoader.font.draw(batcher, "Tap to play", (280 / 2)
-                    - (42 - 1), 75);
-        } else {
+    private void drawMenuUI() {
+        batcher.draw(myTitle, 136 / 2, midPointY - 80,
+                myTitle.getRegionWidth() / 1.2f, myTitle.getRegionHeight() / 1.2f);
 
-            if (myWorld.isGameOver() || myWorld.isHighScore()) {
-                if (myWorld.isGameOver()) {
-                    AssetLoader.shadow.draw(batcher, "Game Over", 100, 56);
-                    AssetLoader.font.draw(batcher, "Game Over", 99, 55);
 
-                    AssetLoader.shadow.draw(batcher, "High Score:", 98, 106);
-                    AssetLoader.font.draw(batcher, "High Score:", 99, 105);
-
-                    String highScore = AssetLoader.getHighScore() + "";
-
-                    // Draw shadow first
-                    AssetLoader.shadow.draw(batcher, highScore, (280 / 2)
-                            - (3 * highScore.length()), 128);
-                    // Draw text
-                    AssetLoader.font.draw(batcher, highScore, (280 / 2)
-                            - (3 * highScore.length() - 1), 127);
-                } else {
-                    AssetLoader.shadow.draw(batcher, "High Score!", 98, 56);
-                    AssetLoader.font.draw(batcher, "High Score!", 99, 55);
-                }
-
-                AssetLoader.shadow.draw(batcher, "Try again?", 98, 76);
-                AssetLoader.font.draw(batcher, "Try again?", 99, 75);
-
-            }
-
-            // Convert integer into String
-            String score = myWorld.getScore() + "";
-
-            // Draw shadow first
-            AssetLoader.shadow.draw(batcher, "" + myWorld.getScore(), (300 / 2)
-                    - (3 * score.length() - 1), 12);
-
-            // Draw text
-            AssetLoader.font.draw(batcher, "" + myWorld.getScore(), (300 / 2)
-                    - (3 * score.length() - 1), 11);
+        for (SimpleButton button : menuButtons) {
+            button.draw(batcher);
         }
 
-        batcher.end();
     }
+
+    private void drawScoreboard() {
+        batcher.draw(scoreboard, 62, midPointY - 30, 97, 37);
+
+        batcher.draw(noStar, 65, midPointY - 15, 10, 10);
+        batcher.draw(noStar, 77, midPointY - 15, 10, 10);
+        batcher.draw(noStar, 89, midPointY - 15, 10, 10);
+        batcher.draw(noStar, 101, midPointY - 15, 10, 10);
+        batcher.draw(noStar, 113, midPointY - 15, 10, 10);
+
+        if (myWorld.getScore() > 2) {
+            batcher.draw(star, 113, midPointY - 15, 10, 10);
+        }
+
+        if (myWorld.getScore() > 17) {
+            batcher.draw(star, 101, midPointY - 15, 10, 10);
+        }
+
+        if (myWorld.getScore() > 50) {
+            batcher.draw(star, 89, midPointY - 15, 10, 10);
+        }
+
+        if (myWorld.getScore() > 80) {
+            batcher.draw(star, 77, midPointY - 15, 10, 10);
+        }
+
+        if (myWorld.getScore() > 120) {
+            batcher.draw(star, 65, midPointY - 15, 10, 10);
+        }
+
+        int length = ("" + myWorld.getScore()).length();
+
+        AssetLoader.whiteFont.draw(batcher, "" + myWorld.getScore(),
+                145 - (2 * length), midPointY - 20);
+
+        int length2 = ("" + AssetLoader.getHighScore()).length();
+        AssetLoader.whiteFont.draw(batcher, "" + AssetLoader.getHighScore(),
+                145 - (2.5f * length2), midPointY - 3);
+
+    }
+
+    private void drawRetry() {
+        batcher.draw(retry, 80, midPointY + 10, 66, 14);
+    }
+
+    private void drawReady() {
+        batcher.draw(ready, 80, midPointY - 50, 68, 14);
+    }
+
+    private void drawGameOver() {
+        batcher.draw(gameOver, 65, midPointY - 50, 92, 14);
+    }
+
+    private void drawScore() {
+        int length = ("" + myWorld.getScore()).length();
+        AssetLoader.shadow.draw(batcher, "" + myWorld.getScore(),
+                110 - (3 * length), midPointY - 82);
+        AssetLoader.font.draw(batcher, "" + myWorld.getScore(),
+                110 - (3 * length), midPointY - 83);
+    }
+
+    private void drawHighScore() {
+        batcher.draw(highScore, 80, midPointY - 50, 96, 14);
+    }
+
+
+    public void render(float delta, float runTime) {
+
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        shapeRenderer.begin(ShapeType.Filled);
+
+
+        // Draw Grass
+        shapeRenderer.setColor(111 / 255.0f, 186 / 255.0f, 45 / 255.0f, 1);
+        shapeRenderer.rect(0, midPointY + 66, 220, 11);
+
+        // Draw Dirt
+        shapeRenderer.setColor(147 / 255.0f, 80 / 255.0f, 27 / 255.0f, 1);
+        shapeRenderer.rect(0, midPointY + 77, 220, 52);
+
+        shapeRenderer.end();
+
+        batcher.begin();
+        batcher.disableBlending();
+
+        batcher.draw(myBg, 0, 0, 220, 170);
+
+        drawPipes();
+
+        batcher.enableBlending();
+        drawSkulls();
+
+        if (myWorld.isRunning()) {
+            drawGoku(runTime);
+            drawScore();
+        } else if (myWorld.isReady()) {
+            drawGoku(runTime);
+            drawReady();
+        } else if (myWorld.isMenu()) {
+            drawGokuCentered(runTime);
+            drawMenuUI();
+        } else if (myWorld.isGameOver()) {
+            drawScoreboard();
+            drawGoku(runTime);
+            drawGameOver();
+            drawRetry();
+        } else if (myWorld.isHighScore()) {
+            drawScoreboard();
+            drawGoku(runTime);
+            drawHighScore();
+            drawRetry();
+        }
+
+        drawGrass();
+
+        batcher.end();
+        drawTransition(delta);
+
+    }
+
+    public void prepareTransition(int r, int g, int b, float duration) {
+        transitionColor.set(r / 255.0f, g / 255.0f, b / 255.0f, 1);
+        alpha.setValue(1);
+        Tween.registerAccessor(Value.class, new ValueAccessor());
+        manager = new TweenManager();
+        Tween.to(alpha, -1, duration).target(0)
+                .ease(TweenEquations.easeOutQuad).start(manager);
+    }
+
+    private void drawTransition(float delta) {
+        if (alpha.getValue() > 0) {
+            manager.update(delta);
+            Gdx.gl.glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+            shapeRenderer.begin(ShapeType.Filled);
+            shapeRenderer.setColor(transitionColor.r, transitionColor.g,
+                    transitionColor.b, alpha.getValue());
+            shapeRenderer.rect(0, 0, 220, 300);
+            shapeRenderer.end();
+            Gdx.gl.glDisable(GL20.GL_BLEND);
+
+        }
+    }
+
 }

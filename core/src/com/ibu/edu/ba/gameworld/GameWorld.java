@@ -1,9 +1,5 @@
 package com.ibu.edu.ba.gameworld;
 
-/**
- * Created by Omer on 6.5.2015.
- */
-
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.ibu.edu.ba.gameobjects.Goku;
@@ -16,17 +12,18 @@ public class GameWorld {
     private ScrollHandler scroller;
     private Rectangle ground;
     private int score = 0;
-
+    private float runTime = 0;
     private int midPointY;
+    private GameRenderer renderer;
 
     private GameState currentState;
 
     public enum GameState {
-        READY, RUNNING, GAMEOVER, HIGHSCORE
+        MENU, READY, RUNNING, GAMEOVER, HIGHSCORE
     }
 
     public GameWorld(int midPointY) {
-        currentState = GameState.READY;
+        currentState = GameState.MENU;
         this.midPointY = midPointY;
         goku = new Goku(43, midPointY - 5, 22, 17);
         scroller = new ScrollHandler(this, midPointY + 66);
@@ -34,20 +31,25 @@ public class GameWorld {
     }
 
     public void update(float delta) {
+        runTime += delta;
+
         switch (currentState) {
             case READY:
+            case MENU:
                 updateReady(delta);
                 break;
 
         case RUNNING:
+            updateRunning(delta);
+            break;
         default:
-        updateRunning(delta);
-        break;
+                break;
         }
     }
 
     private void updateReady(float delta) {
-        // Do nothing for now
+        goku.updateReady(runTime);
+        scroller.updateReady(delta);
     }
 
     public void updateRunning(float delta) {
@@ -56,57 +58,92 @@ public class GameWorld {
         }
         goku.update(delta);
         scroller.update(delta);
-
         if (scroller.collides(goku) && goku.isAlive()) {
             scroller.stop();
             goku.die();
             AssetLoader.dead.play();
+            renderer.prepareTransition(255, 255, 255, .3f);
+
         }
 
         if (Intersector.overlaps(goku.getBoundingCircle(), ground)) {
+            if (goku.isAlive()) {
+                AssetLoader.dead.play();
+                renderer.prepareTransition(255, 255, 255, .3f);
+
+                goku.die();
+            }
             scroller.stop();
-            goku.die();
             goku.decelerate();
             currentState = GameState.GAMEOVER;
 
             if (score > AssetLoader.getHighScore()) {
                 AssetLoader.setHighScore(score);
                 currentState = GameState.HIGHSCORE;
+                AssetLoader.ThatWasPrityFun.play();
             }
         }
 
+    }
+
+
+    public Goku getGoku() {
+        return goku;
+    }
+
+    public int getMidPointY() {
+        return midPointY;
+    }
+
+    public ScrollHandler getScroller() {
+        return scroller;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void addScore(int increment) {
+        score += increment;
+    }
+
+    public void start() {
+        currentState = GameState.RUNNING;
+    }
+
+    public void ready() {
+        currentState = GameState.READY;
+        renderer.prepareTransition(0, 0, 0, 1f);
+    }
+
+    public void restart() {
+        score = 0;
+        goku.onRestart(midPointY - 5);
+        scroller.onRestart();
+        ready();
+    }
+
+    public boolean isReady() {
+        return currentState == GameState.READY;
+    }
+
+    public boolean isGameOver() {
+        return currentState == GameState.GAMEOVER;
     }
 
     public boolean isHighScore() {
         return currentState == GameState.HIGHSCORE;
     }
 
-    public Goku getGoku() {
-        return goku;
+    public boolean isMenu() {
+        return currentState == GameState.MENU;
     }
-    public ScrollHandler getScroller() {
-        return scroller;
+
+    public boolean isRunning() {
+        return currentState == GameState.RUNNING;
     }
-    public int getScore() {
-        return score;
-    }
-    public void addScore(int increment) {
-        score += increment;
-    }
-    public boolean isReady() {
-        return currentState == GameState.READY;
-    }
-    public void start() {
-         this.currentState = GameState.RUNNING;
-    }
-    public void restart() {
-        currentState = GameState.READY;
-        score = 0;
-        goku.onRestart(midPointY -5);
-        scroller.onRestart();
-        currentState = GameState.READY;
-    }
-    public boolean isGameOver() {
-        return currentState == GameState.GAMEOVER;
+
+    public void setRenderer(GameRenderer renderer) {
+        this.renderer = renderer;
     }
 }

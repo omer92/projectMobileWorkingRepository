@@ -1,9 +1,5 @@
 package com.ibu.edu.ba.gameobjects;
 
-/**
- * Created by Omer on 6.5.2015.
- */
-
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
 import com.ibu.edu.ba.gfhelpers.AssetLoader;
@@ -14,15 +10,21 @@ public class Goku {
     private Vector2 position;
     private Vector2 velocity;
     private Vector2 acceleration;
+
     private float rotation;
     private int width;
     private int height;
+
+    private float originalY;
+
     private boolean isAlive;
+
     private Circle boundingCircle;
 
     public Goku(float x, float y, int width, int height) {
         this.width = width;
         this.height = height;
+        this.originalY = y;
         position = new Vector2(x, y);
         velocity = new Vector2(0, 0);
         acceleration = new Vector2(0, 440);
@@ -69,6 +71,9 @@ public class Goku {
 
     }
 
+    public void updateReady(float runTime) {
+        position.y = 2 * (float) Math.sin(7 * runTime) + originalY;
+    }
 
 
     public boolean isFalling() {

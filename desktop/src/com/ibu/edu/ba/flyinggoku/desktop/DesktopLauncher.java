@@ -8,8 +8,8 @@ public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Flying Goku";
-        config.width = 272;
-        config.height = 408;
+        config.width = 854;
+        config.height = 600;
 		new LwjglApplication(new FGGame(), config);
 	}
 }

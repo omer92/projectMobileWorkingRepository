@@ -11,14 +11,25 @@ import com.badlogic.gdx.math.Rectangle;
 public class Pipe extends Scrollable {
 
     private Random r;
+
     private Rectangle skullUp, skullDown, barUp, barDown;
+
     public static final int VERTICAL_GAP = 45;
     public static final int SKULL_WIDTH = 24;
     public static final int SKULL_HEIGHT = 11;
+
+    private static final int X_UPDATE_RATIO = 10;
+
     private float groundY;
     private boolean isScored = false;
 
-    public Pipe(float x, float y, int width, int height, float scrollSpeed, float groundY) {
+    private boolean isMovable = false;  // This identifies if it is a movable one
+    private boolean movingUp = false;
+    private int updateX = 0;
+    private int xCounter = 0;
+
+    public Pipe(float x, float y, int width, int height, float scrollSpeed,
+                float groundY) {
         super(x, y, width, height, scrollSpeed);
 
         r = new Random();
@@ -27,6 +38,9 @@ public class Pipe extends Scrollable {
         barUp = new Rectangle();
         barDown = new Rectangle();
 
+        isMovable = r.nextBoolean();
+        movingUp = r.nextBoolean();
+
         this.groundY = groundY;
     }
 
@@ -34,6 +48,26 @@ public class Pipe extends Scrollable {
     public void update(float delta) {
         // Call the update method in the superclass (Scrollable)
         super.update(delta);
+
+        if (isMovable) {
+            // movingUp = (height <= 15);
+            // Gdx.app.log("Pipe", "Height: " + height + " movingUp: " + movingUp);
+            xCounter++;
+            if (movingUp) {
+                height += updateX;
+                movingUp = (height < 105);
+            } else {
+                height -= updateX;
+                movingUp = (height < 15);
+            }
+            if (xCounter > X_UPDATE_RATIO) {
+                updateX = 1;
+                xCounter = 0;
+            } else {
+                updateX = 0;
+                xCounter++;
+            }
+        }
 
         // The set() method allows you to set the top left corner's x, y
         // coordinates,
@@ -55,6 +89,16 @@ public class Pipe extends Scrollable {
 
     }
 
+    public boolean collides(Goku goku) {
+        if (position.x < goku.getX() + goku.getWidth()) {
+            return (Intersector.overlaps(goku.getBoundingCircle(), barUp)
+                    || Intersector.overlaps(goku.getBoundingCircle(), barDown)
+                    || Intersector.overlaps(goku.getBoundingCircle(), skullUp) || Intersector
+                    .overlaps(goku.getBoundingCircle(), skullDown));
+        }
+        return false;
+    }
+
     @Override
     public void reset(float newX) {
         // Call the reset method in the superclass (Scrollable)
@@ -62,6 +106,8 @@ public class Pipe extends Scrollable {
         // Change the height to a random number
         height = r.nextInt(90) + 15;
         isScored = false;
+        isMovable = r.nextBoolean();
+        movingUp = r.nextBoolean();
     }
 
     public void onRestart(float x, float scrollSpeed) {
@@ -85,21 +131,11 @@ public class Pipe extends Scrollable {
         return barDown;
     }
 
-    public boolean collides(Goku goku) {
-        if (position.x < goku.getX() + goku.getWidth()) {
-            return (Intersector.overlaps(goku.getBoundingCircle(), barUp)
-                    || Intersector.overlaps(goku.getBoundingCircle(), barDown)
-                    || Intersector.overlaps(goku.getBoundingCircle(), skullUp) || Intersector
-                    .overlaps(goku.getBoundingCircle(), skullDown));
-        }
-        return false;
-    }
-
     public boolean isScored() {
         return isScored;
     }
-    public void setScored(boolean b) {
-        isScored = b;
+    public void setScored(boolean isScored) {
+        this.isScored = isScored;
     }
 
 }
